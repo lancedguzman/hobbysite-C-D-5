@@ -1,0 +1,26 @@
+{% extends 'home_page.html' %}
+{% load static %}
+
+{% block content %}
+<body>
+    <div class="text-center">
+        <h1>
+            {{ item.product_name }}
+        </h1>
+        <img src="{% static '' %}{{ item.product_image }}" class="card-img-top" alt="{{ item.product_name }}" style="width: 500px; height: 500px">
+        <p>
+            Type: {{ item.product_type.type_name }}
+        </p>
+        <p>
+            Description: {{ item.product_description }}
+        </p>
+        <p>
+            Price: {{ item.product_price }}
+        </p>
+        <a href="{% url 'merchstore:items_list' %}">Back to Product List</a>
+    </div>
+
+</body>
+{% endblock %}
+
+{% block home_content %}{% endblock %}
