@@ -1,0 +1,22 @@
+{% extends 'home_page.html' %}
+
+{% block content %}
+<h1>Profile</h1>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <p>
+            <label for="register-input-email">Email:</label>
+            <input type="email" name="email" id="register-input-email" value="{{ profile.email_address }}">
+        </p>
+        <p>
+            Username: {{ user.username }}
+        </p>
+        <p>
+            <label for="register-input-displayName">Display Name:</label>
+            <input type="text" name="display-name" id="register-input-displayName" value="{{ profile.display_name }}">
+        </p>
+        <button type="submit" class="btn btn-dark">Save</button>
+    </form>
+{% endblock %}
+
+{% block home_content %}{% endblock %}
