@@ -1,0 +1,12 @@
+{% extends 'home_page.html' %}
+
+{% block content %}
+<h1>Create your product.</h1>
+<h2>Fill out this form.</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ product_form.as_p }}
+    <button type="submit" class="btn btn-dark position-fixed" style="bottom: 20px; right: 20px;">Create</button>
+</form>
+<a href="{% url 'merchstore:product_list' %}" class="btn btn-dark position-fixed" style="bottom: 20px; left: 20px;">Back to Products</a>
+{% endblock %}
