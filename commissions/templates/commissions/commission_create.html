@@ -1,0 +1,24 @@
+{% extends "commissions/base.html" %}
+
+{% block title %}Create Commission{% endblock %}
+
+{% block content %}
+  <h1>Create a New Commission</h1>
+  <form method="post">
+    {% csrf_token %}
+    <label>Title:</label><br>
+    <input type="text" name="title" required><br><br>
+
+    <label>Description:</label><br>
+    <textarea name="description" rows="5" required></textarea><br><br>
+
+    <label>Status:</label><br>
+    <select name="status">
+      {% for value, label in status_choices %}
+        <option value="{{ value }}">{{ label }}</option>
+      {% endfor %}
+    </select><br><br>
+
+    <button type="submit">Create</button>
+  </form>
+{% endblock %}

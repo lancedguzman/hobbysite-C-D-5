@@ -1,0 +1,27 @@
+{% extends "commissions/base.html" %}
+
+{% block content %}
+  <h1>Job: {{ job.role }}</h1>
+
+  <h2>Applicants</h2>
+  <h2>Status: {{ job.status }} </h2>
+  <ul>
+    {% for applicant in applicants %}
+      <li>
+        {{ applicant.applicant.display_name }} - {{ applicant.status }}
+        <form method="post">
+          {% csrf_token %}
+          <input type="hidden" name="applicant_id" value="{{ applicant.id }}">
+          {% if applicant.status != 'Accepted' %}
+            <button type="submit" name="action" value="accept">Accept</button>
+          {% elif applicant.status != 'Rejected' %}
+            <button type="submit" name="action" value="reject">Reject</button>
+          {% endif %}
+        </form>
+      </li>
+    {% endfor %}
+  </ul>
+
+  <br>
+  <a href="{% url 'commissions:commission' job.commission.id %}">Back to Commission</a>
+{% endblock %}

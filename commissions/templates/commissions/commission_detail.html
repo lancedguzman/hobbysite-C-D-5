@@ -1,0 +1,40 @@
+{% extends "commissions/base.html" %}
+
+{% block content %}
+  <h1>{{ commission.title }}</h1>
+  <p>{{ commission.description }}</p>
+  <p>Status: {{ commission.status }}</p>
+  <p>Total Manpower Required: {{ total_manpower }}</p>
+  <p>Open Manpower Slots: {{ open_manpower }}</p>
+
+  <h2>Jobs</h2>
+  <ul>
+    {% for job in jobs %}
+      <li>
+        <strong>{{ job.role }}</strong> ({{ job.status }}) ({{ job.accepted_count }}/{{ job.manpower_required }})  
+        {% if user.profile == commission.author %}
+          <a href="{% url 'commissions:job_detail' job.id %}">View Applicants</a>
+        {% endif %}
+        {% for key, value in can_apply_filter.items %}
+          {% if user.is_authenticated and value and key == job.id %}
+              <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="apply_job_id" value="{{ job.id }}">
+                <button type="submit">Apply to Job</button>
+              </form>
+          {% endif %}
+        {% endfor %}
+      </li>
+    {% endfor %}
+  </ul>
+
+  {% if commission.author %}
+    {% if user.profile == commission.author %}
+      <a href="{% url 'commissions:commission_update' commission.id %}">Edit Commission</a>
+    {% endif %}
+  {% else %}
+    <p><em>This commission's author has been deleted.</em></p>
+  {% endif %}
+  <hr>
+  <a href="{% url 'commissions:commissions_list' %}">Back to Commission List</a>
+{% endblock %}

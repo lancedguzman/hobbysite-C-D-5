@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Commissions{% endblock %}</title>
+    <style>
+        body { font-family: sans-serif; margin: 2rem; }
+        nav a { margin-right: 10px; }
+        .messages { margin-bottom: 1em; padding: 10px; background: #f5f5f5; }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="/">Home</a>
+        {% if user.is_authenticated %}
+            <span>Welcome, {{ user.profile.display_name }}!</span>
+            <a href="{% url 'user_management:logout' %}">Logout</a>
+        {% else %}
+            <a href="{% url 'user_management:login' %}">Login</a>
+        {% endif %}
+    </nav>
+
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% block content %}{% endblock %}
+</body>
+</html>
