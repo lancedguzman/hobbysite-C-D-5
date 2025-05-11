@@ -1,0 +1,34 @@
+{% extends 'home_page.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="text-center mb-4">Welcome to your shopping cart!</h1>
+    <p class="text-center mb-4">View your transactions here.</p>
+
+    {% if user_transactions %}
+    <h3 class="mt-5 mb-3">Your Transactions</h3>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for transaction in user_transactions %}
+        <div class="col">
+            <div class="card h-100 shadow">
+                <img src="{% static '' %}{{ transaction.product.image }}" class="card-img-top" alt="{{ transaction.product.name }}">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <p>{{ transaction.product.name }}</p>
+                    </h5>
+                    <p class="card-text">Amount: {{ transaction.amount }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <a href="{% url 'merchstore:product_list' %}" class="btn btn-dark position-fixed" style="bottom: 20px; right: 20px;">
+        Back to Product List
+    </a>
+</div>
+{% endblock %}
+
+{% block home_content %}{% endblock %}
