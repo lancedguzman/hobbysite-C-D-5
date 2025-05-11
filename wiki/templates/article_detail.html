@@ -1,12 +1,45 @@
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
-    <title>{{Article_Detail.title}}</title>
-    <h1>{{Article_Detail.title}}</h1>
+    <title>{{article.title}}</title>
 </head>
 <body>
-    <ul>
-        <li>{{ Article_Detail.entry_field }}</li>
-    </ul>
+
+    <p><a href="{% url 'wiki:articles_list' %}">Return to Articles List</a></p>
+
+    {% if request.user == article.author.user %}
+        <a href="{% url 'wiki:article_update' pk=article.pk %}">Edit this article</a>
+    {% endif %}
+
+    <h1>{{article.title}}</h1>
+
+    <img src="{{ article.header_image.url }}" alt="Header Image" >
+
+    <p>{{ article.entry }}</p>
+
+    {% if user.is_authenticated %}
+        <h1>Leave a Comment</h1>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Post Comment</button>
+        </form>
+    {% else %}
+        <p>You must be logged in to comment.</p>
+    {% endif %}
+
+    {% for comment in comments %}
+        <strong>{{ comment.author }}</strong> ({{ comment.created_on|date:"F j, Y" }})
+        <li>{{ comment.entry }}</li>
+    {% empty %}
+        <li>No comments available.</li>
+    {% endfor %}
+    
+    <h1>Related Articles</h1>
+    {% for related_article in related_articles %}
+        <li><a href="{% url 'wiki:article_detail' pk=related_article.pk %}">{{ related_article.title }}</a></li>
+    {% empty %}
+        <p>No related articles available.</p>
+    {% endfor %}
 </body>
 </html>

@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'merchstore',
     'wiki',
     'blog',
-    'forum',
     'commissions',
     'user_management',
 ]
@@ -130,11 +129,15 @@ STATICFILES_DIRS = [
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
+MEDIA_URL = '/media/'
+
+MEDIA_ROOT = BASE_DIR / 'media'
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = 'merchstore:home_page'
 
-LOGIN_URL = 'login/'
+LOGIN_URL = '/login/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 

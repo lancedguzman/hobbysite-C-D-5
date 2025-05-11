@@ -1,0 +1,16 @@
+<html lang="en-US">
+<head>
+    <title>Create Article</title>
+</head>
+
+<body>
+    <h2>Create Article</h2>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit"> Create Article </button> 
+    </form>
+
+  <p><a href="{% url 'wiki:articles_list' %}">Back to Articles</a></p>
+</body>
+</html>

@@ -3,13 +3,36 @@
     <html lang="en-US">
     <head>
         <title>Articles</title>
-        <h1>Articles</h1>
     </head>
     <body>
-        <ul>
-            {% for article in Articles_List %}
-                <li>{{ article.title }}</li>
+        {% if user.is_authenticated %}
+        <h2>Your Articles</h2>
+            <ul>
+                {% if user_articles %}
+                    {% for article in user_articles %}
+                        <li><a href="/wiki/article/{{article.pk}}/">{{article.title}}</a></li>
+                    {% endfor %}
+                {% else %}
+                    <p>You haven't written any articles yet.</p>
+                {% endif %}
+            </ul>
+        {% endif %}
+
+        <h2>Articles by Other Users</h2>
+
+        {% for category, articles in categorized_articles.items %}
+            <h3>{{ category.name }}</h3>
+
+            {% for article in articles %}
+                <p><a href="{% url 'wiki:article_detail' pk=article.pk %}">{{article.title}} </a></p>
+            {% empty %}
+            <p>No articles found in this category.</p>
             {% endfor %}
-        </ul>
+
+        {% empty %}
+            <p>No Categories Available</p>
+        {% endfor %}
+
+        <p><a href="{% url 'wiki:article_create' %}">Create a new article</a></p>
     </body>
     </html>
