@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Create Article{% endblock %}
+
+{% block style %}
+  h2 {
+    font-size: 2.5vw;
+    color: rgb(85, 56, 127);
+    text-align: center;
+    margin: 40px 0 20px 0;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid rgba(85, 56, 127, 0.3);
+  }
+  .create_form {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 30px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+  }
+  label {
+    align-self: flex-start;
+    font-weight: bold;
+    color: rgb(85, 56, 127);
+    font-size: 1.5vw;
+  }
+  input,
+  textarea,
+  select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    color: rgb(85, 56, 127);
+    background-color: white;
+  }
+  textarea {
+    resize: vertical;
+    min-height: 150px;
+  }
+  .submit_form {
+    background-color: rgb(85, 56, 127);
+    color: white;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  .submit_form:hover {
+    background-color: rgb(114, 83, 163);
+  }
+  .blog_home_btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: rgb(85, 56, 127);
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+    margin-top: 20px;
+  }
+  .blog_home_btn:hover {
+    background-color: rgb(114, 83, 163);
+  }
+{% endblock %}
+
+{% block main_content %}
+    <div class="main_content">
+        <a href="{% url 'blog:list_view' %}" class="button blog_home_btn"> Return to Article List</a>
+        <h2>Create Article</h2>
+        <div class="create_form">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button class="button submit_form" type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+{% endblock main_content %}

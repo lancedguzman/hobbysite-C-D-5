@@ -112,7 +112,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Manila'
 
 USE_I18N = True
 
@@ -138,4 +138,8 @@ LOGOUT_REDIRECT_URL = 'merchstore:home_page'
 LOGIN_URL = 'login/'
 
 DEFAULT_FROM_EMAIL = 'webmaster@localhost'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
