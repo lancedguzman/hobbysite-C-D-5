@@ -1,28 +1,27 @@
 from django.contrib import admin
 from .models import Commission, Job, JobApplication
 
-class JobInline(admin.TabularInline):  # Using TabularInline for Jobs under Commission
+class JobInline(admin.TabularInline):  
     model = Job
     extra = 1  
-    fields = ('role', 'manpower_required', 'status')  # Display these fields in the inline form
-    list_filter = ('status',)  # Filter status in the inline
+    fields = ('role', 'manpower_required', 'status')  
+    list_filter = ('status',)  
 
-class JobApplicationInline(admin.TabularInline):  # Using TabularInline for JobApplications under Job
+class JobApplicationInline(admin.TabularInline):  
     model = JobApplication
     extra = 1  
-    fields = ('applicant', 'status', 'applied_on')  # Display these fields in the inline form
-    list_filter = ('status',)  # Filter status in the inline
+    fields = ('applicant', 'status', 'applied_on') 
+    list_filter = ('status',)  
 
 class CommissionAdmin(admin.ModelAdmin):
     list_display = ('title', 'status', 'author', 'created_on', 'updated_on')
     search_fields = ('title', 'author__display_name')
     list_filter = ('status', 'created_on')
-    inlines = [JobInline]  # Add JobInline for managing jobs within a commission
+    inlines = [JobInline]  
 
-    # Add a dropdown for status field in the admin form
     fieldsets = (
         (None, {
-            'fields': ('title', 'description', 'author', 'status')  # Including status field here
+            'fields': ('title', 'description', 'author', 'status')  
         }),
     )
 
@@ -30,12 +29,11 @@ class JobAdmin(admin.ModelAdmin):
     list_display = ('commission', 'role', 'manpower_required', 'status')
     search_fields = ('role', 'commission__title')
     list_filter = ('status',)
-    inlines = [JobApplicationInline]  # Add JobApplicationInline for managing applications within a job
+    inlines = [JobApplicationInline] 
 
-    # Add a dropdown for status field in the admin form
     fieldsets = (
         (None, {
-            'fields': ('commission', 'role', 'manpower_required', 'status')  # Including status field here
+            'fields': ('commission', 'role', 'manpower_required', 'status') 
         }),
     )
 
@@ -44,14 +42,12 @@ class JobApplicationAdmin(admin.ModelAdmin):
     search_fields = ('job__role', 'applicant__display_name')
     list_filter = ('status',)
 
-    # Add a dropdown for status field in the admin form
     fieldsets = (
         (None, {
-            'fields': ('job', 'applicant', 'status')  # Including status field here
+            'fields': ('job', 'applicant', 'status') 
         }),
     )
 
-# Register models with the admin site
 admin.site.register(Commission, CommissionAdmin)
 admin.site.register(Job, JobAdmin)
 admin.site.register(JobApplication, JobApplicationAdmin)
