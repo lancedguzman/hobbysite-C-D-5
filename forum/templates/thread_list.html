@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %} Threads {% endblock %}
+
+{% block content %}
+<ul>
+    {% for post in posts %}
+    <li>
+        <a href="{% url 'thread_details' post.id %}">
+            {{ post.title }}
+        </a>
+        ({{ post.created_on|date:"Y-m-d H:i" }})
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}
