@@ -34,8 +34,6 @@ def commissions_list(request):
     })
 
 
-from django.db.models import Count
-
 def commission_detail(request, id):
     commission = get_object_or_404(Commission, id=id)
     jobs = commission.jobs.all().order_by(
@@ -72,14 +70,13 @@ def commission_detail(request, id):
             not_author = commission.author is None or commission.author != request.user.profile
         else:
             already_applied = False
-            not_author = True  # Treat anonymous users as non-authors
+            not_author = True 
 
         not_full = accepted < job.manpower_required
         can_apply = not already_applied and not_full and not_author
         can_apply_filter[job.id] = can_apply
         job_id[job.id] = job.id
 
-    # Handle job application POST
     if request.method == 'POST' and request.user.is_authenticated:
         apply_job_id = request.POST.get('apply_job_id')
         job = get_object_or_404(Job, id=apply_job_id, commission=commission)
@@ -123,31 +120,24 @@ def commission_detail(request, id):
     })
 
 
-
 @login_required
 def commission_create(request):
     if request.method == 'POST':
         title = request.POST.get('title')
         description = request.POST.get('description')
-        status = request.POST.get('status')
-
-        # Validate status
-        valid_statuses = [choice[0] for choice in Commission.COMMISSION_STATUS_CHOICES]
-        if status not in valid_statuses:
-            status = 'Open'  # Default fallback
 
         commission = Commission.objects.create(
             title=title,
             description=description,
             author=request.user.profile,
-            status=status
+            status='Open' 
         )
 
         messages.success(request, "Commission created successfully!")
         return redirect('commissions:commission_update', pk=commission.pk)
 
     return render(request, 'commissions/commission_create.html', {
-        'status_choices': Commission.COMMISSION_STATUS_CHOICES
+        'status_choices': Commission.COMMISSION_STATUS_CHOICES  
     })
 
 
@@ -167,7 +157,6 @@ def commission_update(request, pk):
             commission.description = request.POST.get('description')
             new_status = request.POST.get('status')
 
-            # Determine if commission has any open jobs
             has_jobs = jobs.exists()
             all_jobs_full = all(job.status == 'Full' for job in jobs)
 
@@ -184,7 +173,6 @@ def commission_update(request, pk):
                 commission.status = 'Full'
                 commission.save()
 
-                # Auto-reject pending applications
                 for job in jobs:
                     job.applications.filter(status='Pending').update(status='Rejected')
                 messages.success(request, "Commission marked as full. Pending applications rejected.")
@@ -254,8 +242,8 @@ def job_detail(request, job_id):
                     applicant.save()
                     messages.success(request, f"Applicant {applicant.applicant.display_name} accepted successfully.")
 
-                    # Re-check if job is now full
-                    accepted_count += 1  # Include the one just accepted
+            
+                    accepted_count += 1  
                     if accepted_count >= job.manpower_required:
                         job.status = 'Full'
                         job.save()
@@ -267,7 +255,7 @@ def job_detail(request, job_id):
                 applicant.save()
                 messages.success(request, f"Applicant {applicant.applicant.display_name} rejected successfully.")
 
-                # Re-check if we need to reopen the job
+            
                 if was_accepted:
                     accepted_count = JobApplication.objects.filter(job=job, status='Accepted').count()
                     if accepted_count < job.manpower_required and job.status == 'Full':
