@@ -1,10 +1,80 @@
-{% extends 'home_page.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Profile</title>
+  <meta charset="utf-8">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: "Fredoka", sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .article_header {
+      z-index: 9999;
+      position: sticky;
+      top: 0;
+      background-color: rgb(255, 255, 255);
+      border-bottom: 1px solid #ccc;
+    }
+    .header_content {
+      padding: 20px;
+      width: 98%;
+      display: flex;
+      justify-content: space-between;
+    }
+    .header_content a {
+      text-decoration: none;
+      font-weight: 500;
+      color: #6C5B7B;
+    }
+    .navbar a {
+      margin-left: 15px;
+    }
+    .main_content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 40px;
+      text-align: center;
+    }
+    .main_content h1 {
+      color: #6C5B7B;
+    }
+    .main_content p {
+      font-size: 1.1em;
+      margin: 8px 0;
+    }
+  </style>
+</head>
+<body>
+  <header class="article_header">
+    <div class="header_content">
+      <a href="/" class="logo">Hobbysite</a>
+      <nav class="navbar">
+        <a href="{% url 'user_management:profile' %}">Profile</a>
+        <a href="{% url 'merchstore:product_list' %}">Merchstore</a>
+        <a href="{% url 'wiki:articles_list' %}">Wiki</a>
+        <a href="{% url 'blog:list_view' %}">Blog</a>
+        <a href="{% url 'commissions:commissions_list' %}">Commissions</a>
+        <a href="#">Forum</a>
+        {% if user.is_authenticated %}
+          <form method="post" action="{% url 'user_management:logout' %}" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" style="background:none;border:none;color:#6C5B7B;font-weight:500;margin-left:15px;">Logout</button>
+          </form>
+        {% else %}
+          <a href="{% url 'user_management:login' %}">Login</a>
+        {% endif %}
+      </nav>
+    </div>
+  </header>
 
-{% block content %}
-<h1>Profile</h1>
+  <div class="main_content">
+    <h1>Your Profile</h1>
     <p>Email: {{ user.profile.email_address }}</p>
     <p>Username: {{ user.username }}</p>
     <p>Display Name: {{ user.profile.display_name }}</p>
-{% endblock %}
-
-{% block home_content %}{% endblock %}
+  </div>
+</body>
+</html>
