@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>{% block title %}Wiki{% endblock %}</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+    .article_header {
+      z-index: 9999;
+      position: sticky;
+      top: 0;
+      background-color: rgb(56, 57, 127);
+      width: 100%;
+      height: 50px;
+    }
+    .header_content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 10px 20px;
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      font-weight: 300;
+      font-size: 1.5vw;
+    }
+    .header_content a {
+      text-decoration: none;
+      font-weight: 500;
+      color: rgb(255, 255, 255);
+    }
+    .navbar {
+      display: flex;
+      gap: 15px;
+    }
+    .main_content {
+      display: flex;
+      flex-direction: column;
+      margin: 20px auto;
+      text-align: center;
+      max-width: 100%;
+    }
+    {% block style %}{% endblock %}
+  </style>
+</head>
+<body>
+  <header class="article_header">
+    <div class="header_content">
+      <a href="" class="logo">Hobbysite</a>
+      <nav class="navbar">
+        <a href="/wiki/articles">Wiki</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="main_content">
+    {% block main_content %}{% endblock %}
+  </div>
+
+  <div class="sub_content">
+    {% block sub_content %}{% endblock %}
+  </div>
+</body>
+</html>

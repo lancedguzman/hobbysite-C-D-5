@@ -6,24 +6,22 @@ from .forms import *
 
 
 def articles_list(request):
+    categories = ArticleCategory.objects.order_by('name').prefetch_related('article_set')
     user_articles = []
     other_articles = Article.objects.all()
 
-    if request.user.is_authenticated:
-        try:
-            profile = request.user.profile
-            user_articles = Article.objects.filter(author=profile)
-            other_articles = Article.objects.exclude(author=profile)
-        except Profile.DoesNotExist:
-            pass
+    if request.user.is_authenticated and hasattr(request.user, 'profile'):
+        user_articles = Article.objects.filter(author=request.user.profile).order_by('-created_on')
+        other_articles = Article.objects.exclude(author=request.user.profile).order_by('-created_on')
+    else:
+        user_articles = []
+        other_articles = Article.objects.all().order_by('-created on')
 
-    categorized_articles = defaultdict(list)
-    for article in other_articles:
-        categorized_articles[article.article_category].append(article)
 
     ctx = {
         'user_articles': user_articles,
-        'categorized_articles': dict(categorized_articles)
+        'other_articles' : other_articles,
+        'categories' : categories
     }
 
     return render(request, 'articles.html', ctx)
@@ -47,6 +45,7 @@ def article_detail(request, pk):
         else:
             form = CommentForm()
 
+    
     ctx = {
         'article': article,
         'comments': comments,

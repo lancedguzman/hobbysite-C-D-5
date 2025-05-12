@@ -1,45 +1,193 @@
-<!DOCTYPE html>
-<html lang="en-US">
-<head>
-    <title>{{article.title}}</title>
-</head>
-<body>
+{% extends 'base.html'%}
+{% load static%}
 
-    <p><a href="{% url 'wiki:articles_list' %}">Return to Articles List</a></p>
+{% block title %}Wiki - {{ article.title }}{% endblock %}
 
-    {% if request.user == article.author.user %}
-        <a href="{% url 'wiki:article_update' pk=article.pk %}">Edit this article</a>
-    {% endif %}
+{% block style %}
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: #fff;
+    color: #333;
+  }
+  h1, h2, h3 {
+    text-align: center;
+    margin: 40px 0 20px 0;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid rgba(85, 56, 127, 0.3);
+    color: rgb(85, 56, 127);
+  }
+  h1 {
+    font-size: 3.5vw;
+  }
+  h2 {
+    font-size: 2.5vw;
+  }
+  h3 {
+    font-size: 2vw;
+  }
+  .main_content {
+    max-width: 100%;
+    padding: 20px;
+    margin: 0 auto;
+  }
+  .article_container {
+    background-color: #f9f9f9;
+    border: 1px solid rgba(85, 56, 127, 0.2);
+    border-radius: 10px;
+    padding: 30px;
+    margin-bottom: 40px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+  .article_container img {
+    display: block;
+    max-width: 90%;
+    height: auto;
+    margin: 0 auto 30px auto;
+    border-radius: 10px;
+  }
+  .title_container {
+    text-align: center;
+  }
+  .title_container h2 {
+    font-size: 1.8rem;
+    color: rgb(85, 56, 127);
+    margin-top: 0;
+  }
+  .entry_detail {
+    text-align: center;
+    font-size: 1rem;
+    margin: 20px 0;
+    color: #555;
+  }
+  .entry_detail .author,
+  .entry_detail .created_on,
+  .entry_detail .updated_on {
+    font-weight: bold;
+    color: rgb(85, 56, 127);
+  }
+  .category_detail {
+    text-align: center;
+    margin: 20px 0;
+    font-size: 1rem;
+    color: #555;
+    border-bottom: 2px solid rgba(85, 56, 127, 0.3);
+  }
+  .category_detail .category_name {
+    font-weight: bold;
+    color: rgb(85, 56, 127);
+  }
+  .category_detail .category_description {
+    margin-top: 10px;
+    color: #333;
+    font-style: italic;
+  }
+  .entry_container {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #222;
+    white-space: pre-wrap;
+    margin-top: 30px;
+  }
+  .button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: rgb(85, 56, 127);
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    margin: 20px auto;
+    display: block;
+    width: fit-content;
+  }
+  .button:hover {
+    background-color: rgb(114, 83, 163);
+  }
+  ul {
+    list-style-type: none;
+    padding-left: 0;
+  }
+  li {
+    margin: 10px 0;
+  }
+  .comment_container {
+    background-color: #fff;
+    border-left: 4px solid rgb(85, 56, 127);
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  }
+  .comment_container p {
+    margin: 0;
+    font-size: 1rem;
+    color: #333;
+  }
+  textarea {
+    width: 100%;
+    min-height: 100px;
+    resize: vertical;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  form p {
+    margin-bottom: 10px;
+  }
+{% endblock %}
 
-    <h1>{{article.title}}</h1>
+{% block main_content%}
+    <div class="main_content">
+        <div class="article_container">
+            <img src="{{ article.header_image.url }}" alt="{{ article.title }} Header Image">
+            <div class="title_container"><h2>{{ article.title }}</h2></div>
+            <div class="entry_detail">
+                <p class="author">Author: {{ article.author }}</p>
+                <p class="created_on">Created On: {{ article.created_on }}</p>
+                <p class="updated_on">Updated On: {{ article.updated_on }}</p>
+            </div>
+            <div class="category_detail">
+                <p class="category_name">Category: {{ article.category }}</p>
+                <p class="category_description">Category Description: {{ article.category.description_field }}</p>
+            </div>
+            <div class="entry_container">{{ article.entry }}</div>
+            {% if article.author == request.user.profile %}
+                <a href="{% url 'wiki:article_update' pk=article.pk %}" class="button update_article_btn">Update Article</a>
+            {% endif %}
+        </div>
+        <h3>Other Articles by {{ article.author }}</h3>
+        <ul>
+            {% for article in related_articles %}
+                <li>
+                    <a class="button related_articles_btn" href="{% url 'wiki:article_detail' pk=article.pk %}">{{ article.title }}</a>
+                </li>
+            {% endfor %}
 
-    <img src="{{ article.header_image.url }}" alt="Header Image" >
-
-    <p>{{ article.entry }}</p>
-
-    {% if user.is_authenticated %}
-        <h1>Leave a Comment</h1>
-        <form method="POST">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Post Comment</button>
-        </form>
-    {% else %}
-        <p>You must be logged in to comment.</p>
-    {% endif %}
-
-    {% for comment in comments %}
-        <strong>{{ comment.author }}</strong> ({{ comment.created_on|date:"F j, Y" }})
-        <li>{{ comment.entry }}</li>
-    {% empty %}
-        <li>No comments available.</li>
-    {% endfor %}
-    
-    <h1>Related Articles</h1>
-    {% for related_article in related_articles %}
-        <li><a href="{% url 'wiki:article_detail' pk=related_article.pk %}">{{ related_article.title }}</a></li>
-    {% empty %}
-        <p>No related articles available.</p>
-    {% endfor %}
-</body>
-</html>
+        </ul>
+        {% if request.user.is_authenticated %}
+        <hr>
+            <h3>Add a Comment</h3>
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="button submit_form">Submit</button>
+            </form>
+        {% endif %}
+        <hr>
+        <h3>Comments</h3>
+        <ul>
+            {% for comment in comments %}
+            <div class="comment_container">
+                <p>{{ comment.author }}: {{ comment.entry }} </p>
+            </div>
+            {% empty %} No comments yet.
+            {% endfor %}
+        </ul>
+        <a href="{% url 'wiki:articles_list' %}" class="button blog_home_btn">Go back to Article List</a>
+    </div>
+{% endblock %}
