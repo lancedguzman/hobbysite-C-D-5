@@ -1,0 +1,47 @@
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="style.css">
+    <title>{% block title %} Forum {% endblock %}</title>
+
+    {% block style %}
+    <style>
+        h1 {
+            font-weight: 700;
+            font-size: 5vw;
+            color: rgb(85, 56, 127);
+            margin-bottom: 20px;
+        }
+
+        #content {
+            padding: 30px 0;
+            color: rgb(85, 56, 127);
+            text-align: center;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: rgb(85, 56, 127);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .button:hover {
+            background-color: rgb(114, 83, 163);
+        }
+    </style>
+    {% endblock %}
+</head>
+
+<body>
+    <h1> Posts </h1>
+    <div id="content">
+        {% block content %}{% endblock %}
+    </div>
+    {% block scripts %}{% endblock %}
+</body>
+</html>
