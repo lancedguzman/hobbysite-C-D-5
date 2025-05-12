@@ -8,3 +8,5 @@ urlpatterns = [
     path('forum/thread/<int:id>/edit', thread_update, name='thread_update'),
 ]
 
+app_name = 'forum'
+
