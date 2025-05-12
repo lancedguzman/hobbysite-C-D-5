@@ -11,5 +11,5 @@
     <button type="submit"> {% if thread %}Update{% else %}Create{% endif %} Thread </button>
 </form>
 
-<p><a href="{% url 'thread_list' %}">Back to thread list</a></p>
+<p><a href="{% url 'forum:thread_list' %}">Back to thread list</a></p>
 {% endblock %}
