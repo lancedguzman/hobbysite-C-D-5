@@ -38,7 +38,7 @@ class Article(models.Model):
 
 
 class Comment(models.Model):
-    author = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True)
+    author = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True, related_name='wiki_comments')
     article = models.ForeignKey(Article, on_delete=models.CASCADE, null=True)
     entry = models.TextField()
     created_on = models.DateTimeField(auto_now_add=True)
