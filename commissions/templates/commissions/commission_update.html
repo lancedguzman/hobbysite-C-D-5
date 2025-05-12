@@ -1,0 +1,146 @@
+{% extends "commissions/base.html" %}
+
+{% block title %}Edit {{ commission.title }}{% endblock %}
+
+{% block style %}
+  h2 {
+    font-size: 2.5vw;
+    color: rgb(85, 56, 127);
+    text-align: center;
+    margin: 40px 0 20px 0;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid rgba(85, 56, 127, 0.3);
+  }
+  .update_form, .job_form {
+    max-width: 1000px;
+    margin: 20px auto;
+    padding: 30px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+  }
+  label {
+    align-self: flex-start;
+    font-weight: bold;
+    color: rgb(85, 56, 127);
+    font-size: 1.5vw;
+  }
+  input,
+  textarea,
+  select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    color: rgb(85, 56, 127);
+    background-color: white;
+  }
+  textarea {
+    resize: vertical;
+    min-height: 150px;
+  }
+  .submit_form {
+    background-color: rgb(85, 56, 127);
+    color: white;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  .submit_form:hover {
+    background-color: rgb(114, 83, 163);
+  }
+  .commission_detail_btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: rgb(85, 56, 127);
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+    margin-top: 20px;
+  }
+  .commission_detail_btn:hover {
+    background-color: rgb(114, 83, 163);
+  }
+{% endblock %}
+
+{% block content %}
+  <div class="main_content">
+    <a href="{% url 'commissions:commission' commission.pk %}" class="commission_detail_btn">← Back to Commission Detail</a>
+
+    <h2>Edit Commission</h2>
+
+    {% if commission.author %}
+      <div class="update_form">
+        <form method="post">
+          {% csrf_token %}
+          <input type="hidden" name="update_commission" value="1">
+
+          <label>Title:</label>
+          <input type="text" name="title" value="{{ commission.title }}" required>
+
+          <label>Description:</label>
+          <textarea name="description" required>{{ commission.description }}</textarea>
+
+          <label>Status:</label>
+          <select name="status">
+            {% for value, label in status_choices %}
+              <option value="{{ value }}" {% if value == commission.status %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+          </select>
+
+          <button type="submit" class="submit_form">Update Commission</button>
+        </form>
+      </div>
+
+      <h2>Existing Jobs</h2>
+      <div class="update_form">
+        {% if jobs %}
+          <ul>
+            {% for job in jobs %}
+              <li><strong>{{ job.role }}</strong> ({{ job.status }}) — {{ job.manpower_required }} person{{ job.manpower_required|pluralize }}</li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p>No jobs added yet.</p>
+        {% endif %}
+      </div>
+
+      <h2>Add a Job</h2>
+      <div class="job_form">
+        <form method="post">
+          {% csrf_token %}
+          <input type="hidden" name="add_job" value="1">
+
+          <label>Role:</label>
+          <input type="text" name="role" required>
+
+          <label>Manpower Required:</label>
+          <input type="number" name="manpower_required" min="1" required>
+
+          <label>Status:</label>
+          <select name="status" required>
+            <option value="Open">Open</option>
+          </select>
+
+          <button type="submit" class="submit_form">Add Job</button>
+        </form>
+      </div>
+
+    {% else %}
+      <p><em>This commission's author has been deleted, and the commission cannot be edited.</em></p>
+    {% endif %}
+  </div>
+{% endblock %}
