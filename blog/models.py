@@ -19,7 +19,7 @@ class Article(models.Model):
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name='blog_articel'
+        related_name='blog_article'
     )
     category = models.ForeignKey(
         ArticleCategory,
