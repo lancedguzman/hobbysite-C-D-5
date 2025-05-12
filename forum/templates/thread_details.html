@@ -32,19 +32,19 @@
     {% endif %}
 
     {% if user.is_authenticated and thread.author == user.profile %}
-        <a href="{% url 'thread_update' thread.id %}"> Edit this thread </a>
+        <a href="{% url 'forum:thread_update' thread.id %}"> Edit this thread </a>
     {% endif %}
 
     <h3> Related Threads </h3>
     <ul>
         {% for more_thread in more_threads %}
             <li>
-                <a href="{% url 'thread_details' more_thread.id %}"> {{ more_thread.title }} </p>
+                <a href="{% url 'forum:thread_details' more_thread.id %}"> {{ more_thread.title }} </p>
             </li>
         {% empty %}
             <li> No related threads </li>
         {% endfor %}
     </ul>
 
-    <p><a href="{% url 'thread_list' %}"> Back to thread list </a></p>
+    <p><a href="{% url 'forum:thread_list' %}"> Back to thread list </a></p>
 {% endblock %}
