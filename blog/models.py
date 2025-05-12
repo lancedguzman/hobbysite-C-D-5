@@ -1,34 +1,61 @@
 from django.db import models
 from django.urls import reverse
+from user_management.models import Profile
 
-# should be sorted by name in ascending order
 class ArticleCategory(models.Model):
-  name = models.CharField(max_length=255)
-  description = models.TextField()
+    name = models.CharField(max_length=255)
+    description = models.TextField()
 
-  class Meta:
-    ordering = ["name"]
-  
-  def __str__(self):
-    return self.name
-  
-  def get_absolute_url(self):
-    return reverse("blog:detail_view", args=[str(self.id)])
+    def __str__(self):
+        return self.name
 
-#should be sorted by data it was created in descending order
+    def get_absolute_url(self):
+        return reverse("blog:detail_view", args=[str(self.id)])
+
 class Article(models.Model):
-  title = models.CharField(max_length=255)
-  category = models.ForeignKey(
-    ArticleCategory,
-    on_delete=models.SET_NULL,
-    null=True
-  )
-  entry = models.TextField()
-  created_on = models.DateTimeField(auto_now_add = True)
-  updated_on = models.DateTimeField(auto_now = True)
+    title = models.CharField(max_length=255)
+    author = models.ForeignKey(
+        Profile,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
+    category = models.ForeignKey(
+        ArticleCategory,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
+    entry = models.TextField()
+    header_img = models.ImageField(
+        upload_to='header_images/',
+        null=True,
+        blank=False
+    )
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
 
-  class Meta:
-    ordering = ["-created_on"]
-  
-  def __str__(self):
-    return self.title
+    def __str__(self):
+        return self.title
+
+    def get_absolute_url(self):
+        return reverse("blog:detail_view", args=[str(self.id)])
+
+class Comment(models.Model):
+    author = models.ForeignKey(
+        Profile,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
+    article = models.ForeignKey(
+        Article,
+        on_delete=models.CASCADE,
+        null=True
+    )
+    entry = models.TextField()
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return str(self.author)

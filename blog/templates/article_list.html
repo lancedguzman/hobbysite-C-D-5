@@ -1,0 +1,114 @@
+{% extends 'base.html'%}
+{% load static%}
+
+{%block title%}Blog{%endblock%}
+
+{% block style %}
+  h1 {
+    font-weight: 700;
+    font-size: 5vw;
+  }
+  .all_article_heading,
+  .user_article_heading {
+    font-size: 2.5vw;
+    color: rgb(85, 56, 127);
+    padding: 20px 20px;
+    background-color: rgba(85, 56, 127, 0.3);
+    text-align: center;
+    margin: 40px 0 20px 0;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  .main_description {
+    font-weight: 500;
+    font-size: 2vw;
+  }
+  .main_content {
+    width: 100%;
+    color:rgb(85, 56, 127);
+    padding: 30px 0;
+  }
+  .article_btn,
+  .article_button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: rgb(85, 56, 127);
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+  }
+  .article_btn:hover,
+  .article_button:hover {
+    background-color:rgb(114, 83, 163);
+  }
+  ul {
+    list-style-type: none;
+    padding-left: 0;
+  }
+  li {
+    margin: 10px 0;
+  }
+  .list {
+    margin: 0 auto;
+    text-align: center;
+    max-width: 100%;
+  }
+  .category_name {
+    font-size: 2vw;
+    color: rgb(85, 56, 127);
+  }
+{% endblock %}
+
+{% block main_content %}
+    {% if request.user.is_authenticated and author_articles %}
+      <div class="main_content">
+        <h1>Hey, {{ request.user.profile.display_name }}! <br> Welcome to the Blog!</h1>
+        <h2 class="main_description">Want to create an article?</h2>
+        <a class="button create_article_btn" href="{% url 'blog:create_view' %}">Click here!</a>
+      </div>
+    {% endif %}
+{% endblock %}
+{% block sub_content %}
+    <div class="list user_article_list">
+        {% if request.user.is_authenticated and author_articles %}
+            <h2 class="user_article_heading">Your Articles</h2>
+            {% for article in author_articles %}
+                <h3>
+                    <a href="{{ article.get_absolute_url }}" class="button article_btn">
+                        {{ article.title }}
+                    </a>
+                </h3>
+            {% endfor %}
+        {% elif request.user.is_authenticated %}
+            <p>You haven't created any articles yet.</p>
+            <a class="button create_article_btn" href="{% url 'blog:create_view' %}">Click here to Create!</a>
+        {% endif %}
+    </div>
+    <div class="list all_article_list">
+        <h2 class="all_article_heading">All Articles</h2>
+        {% if categories %}
+            {% for category in categories %}
+                <div class="category_container">
+                    <h3 class="category_name">{{ category.name }}</h3>
+                    <ul>
+                        {% for article in category.article_set.all %}
+                            {% if article in other_articles %}
+                                <li>
+                                    <h4>
+                                        <a href="{{ article.get_absolute_url }}" class="button article_button">
+                                            {{ article.title }}
+                                        </a>
+                                    </h4>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No categories found.</p>
+        {% endif %}
+    </div>
+{% endblock %}
