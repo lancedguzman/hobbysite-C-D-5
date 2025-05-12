@@ -1,5 +1,57 @@
 {% extends "commissions/base.html" %}
 
+{% block style %}
+  h1 {
+    font-weight: 700;
+    font-size: 5vw;
+    color: rgb(85, 56, 127);
+    text-align: center;
+    margin-top: 40px;
+  }
+  h2 {
+    font-size: 2.5vw;
+    color: rgb(85, 56, 127);
+    background-color: rgba(85, 56, 127, 0.3);
+    text-align: center;
+    padding: 20px;
+    margin: 40px 0 20px 0;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  ul {
+    list-style-type: none;
+    padding-left: 0;
+    margin: 0 auto;
+    max-width: 100%;
+    text-align: center;
+  }
+  li {
+    margin: 10px 0;
+  }
+  a {
+    text-decoration: none;
+    font-weight: bold;
+    color: rgb(85, 56, 127);
+  }
+  a:hover {
+    color: rgb(114, 83, 163);
+  }
+  p a {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: rgb(85, 56, 127);
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+  }
+  p a:hover {
+    background-color: rgb(114, 83, 163);
+  }
+{% endblock %}
+
+
 {% block content %}
   <h1>List of Commissions</h1>
 

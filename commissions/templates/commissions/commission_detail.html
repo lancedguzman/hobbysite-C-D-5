@@ -1,5 +1,99 @@
 {% extends "commissions/base.html" %}
 
+{% block style %}
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: #fff;
+    color: #333;
+    font-family: sans-serif;
+  }
+
+  h1, h2 {
+    text-align: center;
+    margin: 40px 0 20px 0;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid rgba(85, 56, 127, 0.3);
+    color: rgb(85, 56, 127);
+  }
+
+  h1 {
+    font-size: 3.5vw;
+  }
+
+  h2 {
+    font-size: 2.5vw;
+  }
+
+  p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    text-align: center;
+    margin: 10px auto;
+    max-width: 800px;
+    color: #222;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  li {
+    margin: 15px 0;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-left: 4px solid rgb(85, 56, 127);
+    border-radius: 5px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  }
+
+  li strong {
+    color: rgb(85, 56, 127);
+  }
+
+  a {
+    text-decoration: none;
+    color: white;
+  }
+
+  a.button, button {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: rgb(85, 56, 127);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-align: center;
+  }
+
+  a.button:hover, button:hover {
+    background-color: rgb(114, 83, 163);
+  }
+
+  form {
+    display: inline-block;
+    margin-top: 10px;
+  }
+
+  hr {
+    margin: 40px auto;
+    max-width: 800px;
+    border: 0;
+    height: 1px;
+    background: rgba(85, 56, 127, 0.2);
+  }
+
+{% endblock %}
+
 {% block content %}
   <h1>{{ commission.title }}</h1>
   <p>{{ commission.description }}</p>
