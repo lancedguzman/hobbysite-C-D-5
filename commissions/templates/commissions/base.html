@@ -62,23 +62,19 @@
         <div class="header_content">
             <a href="/" class="logo">Hobbysite</a>
             <nav class="navbar">
-                <a href="/commissions/">Commissions</a>
-                <a href="/about/">About</a>
-                <a href="/blog/articles/">Blog</a>
+                {% if user.is_authenticated %}
+                    <div class="user-info">
+                        <span>Welcome, {{ user.profile.display_name }}!</span>
+                        <a href="{% url 'user_management:logout' %}">Logout</a>
+                    </div>
+                {% else %}
+                    <a href="{% url 'user_management:login' %}">Login</a>
+                {% endif %}
             </nav>
         </div>
     </header>
 
     <div class="main_content">
-        {% if user.is_authenticated %}
-            <div class="user-info">
-                <span>Welcome, {{ user.profile.display_name }}!</span>
-                <a href="{% url 'user_management:logout' %}">Logout</a>
-            </div>
-        {% else %}
-            <a href="{% url 'user_management:login' %}">Login</a>
-        {% endif %}
-
         {% if messages %}
             <div class="messages">
                 {% for message in messages %}
