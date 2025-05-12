@@ -18,13 +18,15 @@ class Article(models.Model):
         Profile,
         on_delete=models.SET_NULL,
         null=True,
-        blank=True
+        blank=True,
+        related_name='blog_articel'
     )
     category = models.ForeignKey(
         ArticleCategory,
         on_delete=models.SET_NULL,
         null=True,
-        blank=True
+        blank=True,
+        related_name='blog_comment'
     )
     entry = models.TextField()
     header_img = models.ImageField(
