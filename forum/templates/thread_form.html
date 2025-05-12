@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %} Create or Edit Thread {% endblock %}
+
+{% block content %}
+<h1> {% if thread %}Edit{% else %}Create{% endif %} Thread </h1>
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="button"> {% if thread %}Update{% else %}Create{% endif %} Thread </button>
+</form>
+
+<p><a href="{% url 'thread_list' %}" class="button">Back to thread list</a></p>
+{% endblock %}
+
+{% block style %}
+    <style>
+        h1 {
+            font-weight: 700;
+            font-size: 5vw;
+            color: rgb(85, 56, 127);
+            margin-bottom: 20px;
+        }
+
+        form {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: rgb(85, 56, 127);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-top: 10px;
+        }
+
+        .button:hover {
+            background-color: rgb(114, 83, 163);
+        }
+
+        .button:active {
+            background-color: rgb(85, 56, 127);
+        }
+
+        p {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.5vw;
+            color: rgb(85, 56, 127);
+        }
+    </style>
+{% endblock %}

@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block title %} {{ thread.title }} {% endblock %}
+
+{% block content %}
+    <h1> {{ thread.title }} </h1>
+    <p> {{ thread.content }} </p>
+    <p> Created on: {{ thread.created_on|date:"Y-m-d H:i" }} </p>
+    <p> Last updated: {{thread.updated_on|date:"Y-m-d H:i" }} </p>
+
+    <h3> Comments </h3>
+    <ul>
+        {% for comment in comments %}
+        <li>
+            <strong> {{ comment.author.user.username }} </strong> <br> ({{ comment.created_on|date:"Y-m-d H:i" }})
+            <p>{{ comment.content }}</p>
+        </li>
+        {% empty %}
+            <li> No comments yet </li>
+        {% endfor %}
+    </ul>
+
+    {% if user.is_authenticated %}
+        <h3> Leave a Comment </h3>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="button"> Submit </button>
+        </form>
+    {% else %}
+        <p> You need to be logged in to leave a comment. </p>
+    {% endif %}
+
+    {% if user.is_authenticated and thread.author == user.profile %}
+        <a href="{% url 'thread_update' thread.id %}" class="button"> Edit this thread </a>
+    {% endif %}
+
+    <h3> Related Threads </h3>
+    <ul>
+        {% for more_thread in more_threads %}
+            <li>
+                <a href="{% url 'thread_details' more_thread.id %}" class="button"> {{ more_thread.title }} </a>
+            </li>
+        {% empty %}
+            <li> No related threads </li>
+        {% endfor %}
+    </ul>
+
+    <p><a href="{% url 'thread_list' %}" class="button"> Back to thread list </a></p>
+{% endblock %}
+
+{% block style %}
+    <style>
+        h1 {
+            font-weight: 700;
+            font-size: 5vw;
+            color: rgb(85, 56, 127);
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            font-size: 2.5vw;
+            color: rgb(85, 56, 127);
+            margin: 20px 0;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        p {
+            font-size: 1.5vw;
+            color: rgb(85, 56, 127);
+            margin: 10px 0;
+        }
+
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        li {
+            margin: 15px 0;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: rgb(85, 56, 127);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-top: 10px;
+        }
+
+        .button:hover {
+            background-color: rgb(114, 83, 163);
+        }
+
+        .button:active {
+            background-color: rgb(85, 56, 127);
+        }
+    </style>
+{% endblock %}
