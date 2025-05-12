@@ -1,26 +1,40 @@
 from django.contrib import admin
-from .models import ProductType, Product
+from .models import ProductType, Product, Transaction
 
 class ProductTypeAdmin(admin.ModelAdmin):
     """Creates the ProductType Admin Panel."""
     model = ProductType
 
-    list_display = ('type_name', 'type_description',)
-    search_fields = ('type_name',)
-    ordering = ('type_name',)
+    list_display = ('name', 'description',)
+    search_fields = ('name',)
+    ordering = ('name',)
 
 
 class ProductAdmin(admin.ModelAdmin):
     """Creates the Product Admin Panel."""
     model = Product
 
-    list_display = ('product_name','product_type',
-                    'product_description', 'product_price',)
+    list_display = ('name', 'product_type',
+                    'owner', 'description',
+                    'price','stock',
+                    'status')
     list_filter = ('product_type',)
-    search_fields = ('product_name', 'product_type',)
-    ordering = ('product_name',)
-    list_editable = ('product_price',)
+    search_fields = ('name', 'product_type',)
+    ordering = ('name',)
+    list_editable = ('price','stock',)
+
+
+class TransactionAdmin(admin.ModelAdmin):
+    """Creates the Transaction Admin Panel."""
+    model = Transaction
+
+    list_display = ('buyer', 'product',
+                    'amount', 'status',
+                    'CreatedOn',)
 
 
 admin.site.register(ProductType, ProductTypeAdmin)
+
 admin.site.register(Product, ProductAdmin)
+
+admin.site.register(Transaction, TransactionAdmin)

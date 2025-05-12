@@ -1,0 +1,38 @@
+{% extends 'home_page.html' %}
+{% load static %}
+
+{% block content %}
+<body>
+    <div class="text-center">
+        <h1>{{ product.name }}</h1>
+        <img src="{% static product.image %}" class="card-img-top" alt="{{ product.name }}" style="width: 500px; height: 500px">
+        <p>Owner: {{ product.owner }}</p>
+        <p>Type: {{ product.product_type.name }}</p>
+        <p>Description: {{ product.description }}</p>
+        <p>Price: {{ product.price }}</p>
+        <p>Stock: {{ product.stock }}</p>
+        <p>Status: {{ product.status }}</p>
+
+        {% if transaction_form %}
+        <hr>
+        <h2>Buy this product</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ transaction_form.as_p }}
+            <button type="submit" class="btn btn-dark" 
+                {% if product.stock == 0 or product.owner == request.user.profile %}disabled{% endif %}>
+                Buy
+            </button>
+        </form>
+        {% endif %}
+
+        <a href="{% url 'merchstore:product_list' %}" class="btn btn-dark position-fixed" style="bottom: 20px; left: 20px;">Back to Product List</a>
+
+        {% if request.user.is_authenticated and product.owner == request.user.profile %}
+        <a href="{% url 'merchstore:product_update' product.id %}" class="btn btn-dark position-fixed" style="bottom: 20px; right: 20px;">Update Product</a>
+        {% endif %}
+    </div>
+</body>
+{% endblock %}
+
+{% block home_content %}{% endblock %}

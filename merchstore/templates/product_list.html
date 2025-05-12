@@ -1,0 +1,62 @@
+{% extends 'home_page.html' %}
+{% load static %}
+
+{% block title %}Merchstore{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    {% if user.is_authenticated %}
+        <h1 class="text-center mb-4">Welcome To Our Merchstore, {{ user.username }}!</h1>
+        <p class="text-center">Browse through our products.</p>
+    {% else %}
+        <h1 class="text-center mb-4">Welcome To Our Merchstore, Guest!</h1>
+        <p class="text-center">You need to login to buy our products.</p>
+    {% endif %}
+
+    {% if user_products %}
+        <h3 class="mt-5 mb-3">Your Products</h3>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            {% for product in user_products %}
+            <div class="col">
+                <div class="card h-100 shadow">
+                    <img src="{% static '' %}{{ product.image }}" class="card-img-top" alt="{{ product.name }}">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a href="{% url 'merchstore:product_detail' product.id %}" class="text-decoration-none">
+                                {{ product.name }}
+                            </a>
+                        </h5>
+                        <p class="card-text">Price: {{ product.price }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if other_products %}
+        <h3 class="mt-5 mb-3">All Products</h3>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            {% for product in other_products %}
+            <div class="col">
+                <div class="card h-100 shadow">
+                    <img src="{% static '' %}{{ product.image }}" class="card-img-top" alt="{{ product.name }}">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a href="{% url 'merchstore:product_detail' product.id %}" class="text-decoration-none">
+                                {{ product.name }}
+                            </a>
+                        </h5>
+                        <p class="card-text">Price: {{ product.price }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <a href="{% url 'merchstore:product_create' %}" class="btn btn-dark position-fixed" style="bottom: 20px; right: 20px;">Add Product</a>
+    <a href="{% url 'merchstore:transactions' %}" class="btn btn-dark position-fixed" style="bottom: 65px; left: 20px;">View Transactions</a>
+    <a href="{% url 'merchstore:cart' %}" class="btn btn-dark position-fixed" style="bottom: 20px; left: 20px;">View Cart</a>
+</div>
+{% endblock %}
