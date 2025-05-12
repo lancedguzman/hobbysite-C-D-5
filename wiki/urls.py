@@ -9,5 +9,3 @@ urlpatterns = [
     path('article/add/', article_create, name='article_create'),
     path('article/<int:pk>/edit/', article_update, name='article_update')
 ]
-
-

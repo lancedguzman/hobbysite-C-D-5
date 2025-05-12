@@ -15,25 +15,26 @@ def articles_list(request):
             user_articles = Article.objects.filter(author=profile)
             other_articles = Article.objects.exclude(author=profile)
         except Profile.DoesNotExist:
-            pass  
-            
+            pass
+
     categorized_articles = defaultdict(list)
     for article in other_articles:
         categorized_articles[article.article_category].append(article)
 
     ctx = {
-        'user_articles': user_articles, 
+        'user_articles': user_articles,
         'categorized_articles': dict(categorized_articles)
     }
-    
+
     return render(request, 'articles.html', ctx)
+
 
 def article_detail(request, pk):
     article = get_object_or_404(Article, pk=pk)
     comments = Comment.objects.filter(article=article).order_by('-created_on')
     related_articles = Article.objects.filter(article_category=article.article_category).exclude(pk=article.pk)[:2]
     form = CommentForm()
-    
+
     if request.user.is_authenticated:
         if request.method == 'POST':
             form = CommentForm(request.POST)
@@ -45,7 +46,7 @@ def article_detail(request, pk):
                 return redirect('wiki:article_detail', pk=article.pk)
         else:
             form = CommentForm()
-        
+
     ctx = {
         'article': article,
         'comments': comments,
@@ -54,6 +55,7 @@ def article_detail(request, pk):
     }
 
     return render(request, 'article_detail.html', ctx)
+
 
 @login_required
 def article_create(request):
@@ -69,11 +71,11 @@ def article_create(request):
 
     return render(request, 'article_create.html', {'form': form})
 
+
 @login_required
-def article_update(request,pk):
+def article_update(request, pk):
     article = get_object_or_404(Article, pk=pk)
 
-    
     if request.method == 'POST':
         form = ArticleForm(request.POST, request.FILES, instance=article)
         if form.is_valid():

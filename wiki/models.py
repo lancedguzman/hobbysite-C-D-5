@@ -2,6 +2,7 @@ from django.db import models
 from django.urls import reverse
 from user_management.models import Profile
 
+
 class ArticleCategory(models.Model):
     name = models.CharField(max_length=255)
     description_field = models.TextField()
@@ -20,7 +21,7 @@ class Article(models.Model):
     author = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True)
     article_category = models.ForeignKey(ArticleCategory, on_delete=models.SET_NULL, null=True)
     entry = models.TextField()
-    header_image = models.ImageField(upload_to='headers/', null=True, blank=True )
+    header_image = models.ImageField(upload_to='headers/', null=True, blank=True)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
 
@@ -34,6 +35,7 @@ class Article(models.Model):
 
     def get_absolute_url(self):
         return reverse('article_detail', args=[self.pk])
+
 
 class Comment(models.Model):
     author = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True)
