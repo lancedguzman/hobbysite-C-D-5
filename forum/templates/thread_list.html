@@ -3,14 +3,33 @@
 {% block title %} Threads {% endblock %}
 
 {% block content %}
+
+{% if user.is_authenticated %}
+    <p><a href="{% url 'thread_create' %}"> Create a new thread </a></p>
+{% endif %}
+
+<h2> Your Threads </h2>
 <ul>
-    {% for post in posts %}
+    {% for post in user_threads %}
     <li>
-        <a href="{% url 'thread_details' post.id %}">
-            {{ post.title }}
-        </a>
-        ({{ post.created_on|date:"Y-m-d H:i" }})
+        <a href="{% url 'thread_details' post.id %}">{{ post.title }}</a>
     </li>
+    {% empty %}
+    <li> You have no threads </li>
     {% endfor %}
 </ul>
+
+<h2> Other Threads </h2>
+{% for category, posts in categorized_threads.items %}
+    <h3> {{ category.name }} </h3>
+    <ul>
+        {% for post in posts %}
+        <li>
+            <a href="{% url 'thread_details' post.id %}"> {{ post.title }} </a>
+        </li>
+        {% empty %}
+        <li> This category has no threads </li>
+        {% endfor %}
+    </ul>
+{% endfor %}
 {% endblock %}
