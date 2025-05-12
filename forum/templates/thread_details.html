@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+<h2>{{ post.category }}</h2>
+<body>
+    {{ post.entry }}
+    <br>Posted on: {{ post.created_on|date:"Y-m-d H:i" }}
+    <br>Last updated: {{ post.updated_on|date:"Y-m-d H:i"}}
+</body>
+{% endblock %}
