@@ -44,7 +44,7 @@
         <a href="{% url 'wiki:articles_list' %}">Wiki</a>
         <a href="{% url 'blog:list_view' %}">Blog</a>
         <a href="{% url 'commissions:commissions_list' %}">Commissions</a>
-        <a href="#">Forum</a>
+        <a href="{% url 'forum:thread_list' %}">Forum</a>
         {% if user.is_authenticated %}
           <form method="post" action="{% url 'user_management:logout' %}" style="background:none;border:none;color:#6C5B7B;font-weight:500;margin-left:15px;">
             {% csrf_token %}
